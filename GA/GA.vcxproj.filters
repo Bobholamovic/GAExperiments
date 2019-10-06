@@ -18,12 +18,24 @@
     <ClInclude Include="GA.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GAMP.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GAMPElite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="exp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GA.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GAMPElite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GAMP.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -153,9 +153,13 @@
   <ItemGroup>
     <ClCompile Include="exp.cpp" />
     <ClCompile Include="GA.cpp" />
+    <ClCompile Include="GAMP.cpp" />
+    <ClCompile Include="GAMPElite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GA.h" />
+    <ClInclude Include="GAMPElite.h" />
+    <ClInclude Include="GAMP.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

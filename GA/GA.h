@@ -10,7 +10,7 @@ using std::vector;
 namespace GA
 {
 	typedef vector<double> CHROM;
-	const double MIN_VAL = -1e300;
+	const double MIN_VAL = 0.0;
 
 	double Rand01();
 
@@ -33,6 +33,8 @@ namespace GA
 		//进化处理类
 		class CEvolution
 		{
+		protected:
+			double m_dSumF = 0.0;	// 当前代所有个体适应值之和，用于加速
 		protected:
 			static bool _Criterion(const CIndividual& ind1, const CIndividual& ind2)
 			{

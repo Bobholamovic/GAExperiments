@@ -42,6 +42,14 @@ namespace GA
 		//生成新一代个体
 		void CEvolution::NextGeneration()
 		{
+			// 更新适应值和
+			// 求和时需要减去最差个体的适应值
+			// 这样保证sum值一定为正，但坏处是最坏个体被选中的概率为0
+			// 注意：只从前m_nPopSize个个体中选，即只遍历父代
+			std::for_each(m_veciPopulation.cbegin(),
+				m_veciPopulation.cbegin() + m_nPopSize,
+				[this](auto e) {m_dSumF += (e.m_dFitValue - m_veciPopulation.back().m_dFitValue); }
+			);
 			// 遗传操作非重叠
 			for (auto k = 0; k < m_nPopSize; k += 2)
 			{
@@ -70,6 +78,7 @@ namespace GA
 			this->_Sort();	// 为新序列排序
 			// 由于此时种群向量有序，直接排除靠后的个体
 			m_veciPopulation.erase(m_veciPopulation.begin() + m_nPopSize, m_veciPopulation.end());
+
 			//// 种群非重叠
 			//// 抛弃全部父代，更换为子代
 			//m_veciPopulation.erase(m_veciPopulation.begin(), m_veciPopulation.begin()+m_nPopSize);
@@ -158,20 +167,13 @@ namespace GA
 		// 选择算子
 		const CIndividual& CEvolution::Select() const
 		{
-			double sum = 0.0, minval = m_veciPopulation[m_nPopSize - 1].m_dFitValue;
-			// 求和时需要减去最差个体的适应值
-			// 这样保证sum值一定为正，但坏处是最坏个体被选中的概率为0
-			// 注意：只从前m_nPopSize个个体中选，即只遍历父代
-			std::for_each(m_veciPopulation.cbegin(),
-				m_veciPopulation.cbegin() + m_nPopSize,
-				[&sum, minval](auto e) {sum += (e.m_dFitValue - minval); }
-			);
-			if (fabs(sum) < 1e-15)	return m_veciPopulation[rand() % m_nPopSize];	// 若sum为0，随机返回一个个体
+			double minval = m_veciPopulation.back().m_dFitValue;
+			if (fabs(m_dSumF) < 1e-15)	return m_veciPopulation[rand() % m_nPopSize];	// 若sum为0，随机返回一个个体
 			double p = Rand01();
 			for (auto i = 0; i < m_nPopSize; i++)
 			{
 				// 轮盘赌
-				p -= (m_veciPopulation[i].m_dFitValue - minval) / sum;
+				p -= (m_veciPopulation[i].m_dFitValue - minval) / m_dSumF;
 				if (p < 0)
 				{
 					return m_veciPopulation[i];

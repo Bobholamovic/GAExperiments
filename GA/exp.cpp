@@ -3,6 +3,8 @@
 #include <time.h>
 
 #include "GA.h"
+#include "GAMP.h"
+#include "GAMPElite.h"
 
 using std::cout;
 using std::endl;
@@ -34,13 +36,13 @@ double Constraint3(GA::CHROM& x)
 
 int main()
 {
-	double thre = 1e-14;
+	const double thre = 1e-14;
 
-	GA::NaiveGA::CEvolution ga(
+	GA::GAMPElite::CEvolutionMPE ga(
 		Object, 1000, 1000, 5, 
 		vector<double>{78, 33, 27, 27, 27}, 
 		vector<double>{102, 45, 45, 45, 45}, 
-		0.2, 0.3
+		0.0, 1.0
 	);
 
 	// 添加约束项
@@ -51,7 +53,7 @@ int main()
 	srand(time(0));	// 设置随机数种子
 	ga.Init();	// 执行初始化
 
-	while (ga.m_nCurrGen < ga.m_nGenerations)
+	while (ga.m_nCurrGen <= ga.m_nGenerations)
 	{
 		cout << "第" << std::setw(4) << ga.m_nCurrGen << "代\t";
 		cout << "当前代最好个体: (";
