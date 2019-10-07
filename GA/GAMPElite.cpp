@@ -25,29 +25,35 @@ namespace GA
 		void CEvolutionMPE::Cross()
 		{
 			vector<CIndividual> candidates(m_nCandidates);
-			int nIdxBest = 0, nIdxScnd = 0;
-			double dBestVal = GA::MIN_VAL, dScndVal = GA::MIN_VAL;
-			// 收集候选人
-			for (auto i = 0; i < m_nCandidates; i++)
-			{
-				candidates[i] = std::move(_Cross());
-				// 决出前两名
-				if (candidates[i].m_dFitValue >= dBestVal)	// 还是得加上等于的情况
-				{
-					nIdxScnd = nIdxBest;
-					dScndVal = dBestVal;
-					nIdxBest = i;
-					dBestVal = candidates[i].m_dFitValue;
-				}
-				else if (candidates[i].m_dFitValue >= dScndVal)
-				{
-					nIdxScnd = i;
-					dScndVal = candidates[i].m_dFitValue;
-				}
-			}
-			// 再次转移资源
-			m_veciPopulation.push_back(std::move(candidates[nIdxBest]));
-			m_veciPopulation.push_back(std::move(candidates[nIdxScnd]));
+			//// FIXME: 此法似乎很不安全，容易move同一资源两次，考虑换成排序吧
+			//int nIdxBest = 0, nIdxScnd = 1;
+			//double dBestVal = GA::MIN_VAL-1, dScndVal = GA::MIN_VAL-2;	// 加上一个偏移值以应对MIN_VAL情况
+			//// 收集候选人
+			//for (auto i = 0; i < m_nCandidates; i++)
+			//{
+			//	candidates[i] = std::move(_Cross());
+			//	// 决出前两名
+			//	if (candidates[i].m_dFitValue >= dBestVal)	// 还是得加上等于的情况
+			//	{
+			//		nIdxScnd = nIdxBest;
+			//		dScndVal = dBestVal;
+			//		nIdxBest = i;
+			//		dBestVal = candidates[i].m_dFitValue;
+			//	}
+			//	else if (candidates[i].m_dFitValue >= dScndVal)
+			//	{
+			//		nIdxScnd = i;
+			//		dScndVal = candidates[i].m_dFitValue;
+			//	}
+			//}
+			//// 再次转移资源
+			//m_veciPopulation.push_back(std::move(candidates[nIdxBest]));
+			//m_veciPopulation.push_back(std::move(candidates[nIdxScnd]));
+			for (auto &e: candidates)
+				e = std::move(_Cross());
+			sort(candidates.begin(), candidates.end(), this->_Criterion);
+			m_veciPopulation.push_back(std::move(candidates[0]));
+			m_veciPopulation.push_back(std::move(candidates[1]));
 		}
 	}
 }

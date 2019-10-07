@@ -28,7 +28,7 @@ namespace GA
 				int np, int nc,
 				vector<double>&& lb, vector<double>&& ub,
 				double pr, double pc, 
-				double m
+				int m
 			) :
 				CEvolution(objfunc, n, np, nc, std::move(lb), std::move(ub), pr, pc), m_nParents(m)
 			{}

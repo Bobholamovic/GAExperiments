@@ -3,14 +3,14 @@
 #include <algorithm>
 #include <vector>
 #include <functional>
-#include <math.h>
+#include <cmath>
 
 using std::vector;
 
 namespace GA
 {
 	typedef vector<double> CHROM;
-	const double MIN_VAL = 0.0;
+	const double MIN_VAL = -1e100;	// 需要根据实际问题调整
 
 	double Rand01();
 

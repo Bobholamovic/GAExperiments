@@ -28,7 +28,7 @@ namespace GA
 				int np, int nc,
 				vector<double>&& lb, vector<double>&& ub,
 				double pr, double pc,
-				double m
+				int m
 			) :
 				CEvolutionMP(objfunc, n, np, nc, std::move(lb), std::move(ub), pr, pc, m)
 			{}
@@ -38,7 +38,7 @@ namespace GA
 				int np, int nc,
 				vector<double>&& lb, vector<double>&& ub,
 				double pr, double pc,
-				double m, double k, double l
+				int m, int k, int l
 			) :
 				CEvolutionMP(objfunc, n, np, nc, std::move(lb), std::move(ub), pr, pc, m), 
 				m_nElites(k), m_nCandidates(l)
