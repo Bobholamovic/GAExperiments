@@ -166,8 +166,8 @@ namespace GA
 		vector<CIndividual> CGLME::GetAllCenters__(const vector<CIndividual>& pts, double eps)
 		{
 			vector<CIndividual> veciRets;
-			// veciRets.push_back(std::move(veciBests[rand()%veciBests.size()]));
-			veciRets.push_back(std::move(pts[0]));	// 保证适应值最优个体一定被选取
+			// veciRets.push_back(pts[rand()%pts.size()]);
+			veciRets.push_back(pts[0]);	// 保证适应值最优个体一定被选取
 			// XXX: 此处应做算法优化
 			bool bFlag = true;
 			for (auto itr = pts.begin() + 1; itr != pts.end(); itr++)
@@ -177,7 +177,7 @@ namespace GA
 					[=, &bFlag](auto e) {bFlag &= (CalcDist__(e.m_vecdChrom, itr->m_vecdChrom) > eps); }
 				);
 				if (bFlag)
-					veciRets.push_back(std::move(*itr));
+					veciRets.push_back(*itr);
 			}
 			// 这种算法返回的个体应该保持原来的顺序
 			return veciRets;

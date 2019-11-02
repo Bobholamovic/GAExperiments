@@ -178,7 +178,9 @@ void PrintInfo(const GA::CIndividual& ind, int n)
 
 int main()
 {
-	int nGlobalGen = 3000;
+	//int nGlobalGen = 1000;
+
+	srand(time(0));	// 设置随机数种子
 
 	//GA::GLME::CGLME ga(
 	//	Object, 1000, 300, 5, 
@@ -194,25 +196,18 @@ int main()
 
 	using std::placeholders::_1;
 	int n = 3;
-	auto exercise1 = std::bind(Exercise1Proto, std::placeholders::_1, n);
-	GA::CHROM lb, ub;
-	for (auto i = 0; i < n; i++)
-	{
-		lb.push_back(-10);
-		ub.push_back(10);
-	}
+	auto exercise1 = std::bind(Exercise1Proto, _1, n);
 	GA::GLME::CGLME ga(
 		exercise1,
 		3500, 1000, n, 
-		std::move(lb), 
-		std::move(ub), 
-		0.0, 1.0, 20, 10, 2, nGlobalGen
+		GA::CHROM(n, -10), 
+		GA::CHROM(n, 10),
+		0.0, 1.0, 20, 10, 2, 3000
 	);
 
 	// 配置参数
 	ga.ConfigLocalParams(80, 160, 0.1, 0.2, 100);
 
-	srand(time(0));	// 设置随机数种子
 	clock_t t1 = clock();
 	ga.Init();	// 执行初始化
 
@@ -245,10 +240,9 @@ int main()
 
 	vector<GA::CIndividual> solutions = ga.PickSolutions(1e-3);
 	cout << "总过程耗时: " << std::setprecision(3) << static_cast<double>(clock() - t1) / CLOCKS_PER_SEC << 's' << endl << endl;
-#ifdef VERBOSE
 	cout << "共找到 " << solutions.size() << " 个可能解，分别为：" << endl;
 	system("PAUSE");
-#endif
+
 	// 对解按适应值进行排序
 	std::sort(
 		solutions.begin(), solutions.end(),
