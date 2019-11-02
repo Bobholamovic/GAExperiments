@@ -4,7 +4,7 @@ namespace GA
 {
 	namespace GAMPElite
 	{
-		void CEvolutionMPE::_SelectParents(vector<CIndividual const*>& parents)
+		void CEvolutionMPE::SelectParents_(vector<CIndividual const*>& parents)
 		{
 			// 选取 m_nElites 个最好的个体，另外 (m_nParents-m_nElites) 个个体从种群中随机选取
 			for (auto i = 0; i < m_nParents; i++)
@@ -50,8 +50,8 @@ namespace GA
 			//m_veciPopulation.push_back(std::move(candidates[nIdxBest]));
 			//m_veciPopulation.push_back(std::move(candidates[nIdxScnd]));
 			for (auto &e: candidates)
-				e = std::move(_Cross());
-			sort(candidates.begin(), candidates.end(), this->_Criterion);
+				e = std::move(Cross_());
+			sort(candidates.begin(), candidates.end(), this->Criterion_);
 			m_veciPopulation.push_back(std::move(candidates[0]));
 			m_veciPopulation.push_back(std::move(candidates[1]));
 		}

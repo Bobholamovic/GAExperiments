@@ -4,7 +4,7 @@ namespace GA
 {
 	namespace GAMP
 	{
-		void CEvolutionMP::_SelectParents(vector<CIndividual const*>& parents)
+		void CEvolutionMP::SelectParents_(vector<CIndividual const*>& parents)
 		{
 			// 等概率随机选取 m_nParents 个父本
 			for (auto i = 0; i < m_nParents; i++)
@@ -13,7 +13,7 @@ namespace GA
 			}
 		}
 
-		CIndividual CEvolutionMP::_Cross()
+		CIndividual CEvolutionMP::Cross_()
 		{
 			// 多父体杂交
 			vector<double> vecdAlpha(m_nParents,0.0);
@@ -22,7 +22,7 @@ namespace GA
 			double dSum = 0.0;
 			vector<CIndividual const *> veciParents;
 
-			_SelectParents(veciParents);	// 挑选父本
+			SelectParents_(veciParents);	// 挑选父本
 
 			// 随机设置 alpha
 			for (auto i = 0; i < m_nParents-1; i++)
@@ -51,8 +51,8 @@ namespace GA
 		void CEvolutionMP::Cross()
 		{
 			// 执行两次多父体杂交
-			m_veciPopulation.push_back(std::move(this->_Cross()));
-			m_veciPopulation.push_back(std::move(this->_Cross()));
+			m_veciPopulation.push_back(std::move(this->Cross_()));
+			m_veciPopulation.push_back(std::move(this->Cross_()));
 		}
 	}
 }

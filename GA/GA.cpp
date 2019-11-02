@@ -6,7 +6,7 @@ namespace GA
 	{
 		// 构造函数
 		CEvolution::CEvolution(
-			double(*objfunc)(CIndividual&), int n,
+			const OBJ_FUNC_TYPE& objfunc, int n,
 			int np, int nc,
 			vector<double>&& lb, vector<double>&& ub,
 			double pr, double pc
@@ -14,8 +14,9 @@ namespace GA
 			m_fcnObj(objfunc), m_nGenerations(n),
 			m_nPopSize(np), m_nGenes(nc),
 			m_vecdLB(lb), m_vecdUB(ub),
-			m_dPr(pr), m_dPc(pc),
-			m_fcnConstraints()
+			m_dPr(pr), m_dPc(pc), 
+			m_nCurrGen(0), 
+			m_vecfcnConstraints()
 		{}
 
 		//初始化种群
@@ -36,7 +37,7 @@ namespace GA
 				m_veciPopulation[i].m_dFitValue = CalcFitness(m_veciPopulation[i]);	// 更新适应值
 			}
 			this->m_nCurrGen = 1;	// 拨回计数器
-			_Sort();	// 对当前种群中个体进行排序，从一开始保证有序性
+			Sort_();	// 对当前种群中个体进行排序，从一开始保证有序性
 		}
 
 		//生成新一代个体
@@ -75,14 +76,14 @@ namespace GA
 			}
 
 			// 种群重叠
-			this->_Sort();	// 为新序列排序
+			this->Sort_();	// 为新序列排序
 			// 由于此时种群向量有序，直接排除靠后的个体
 			m_veciPopulation.erase(m_veciPopulation.begin() + m_nPopSize, m_veciPopulation.end());
 
 			//// 种群非重叠
 			//// 抛弃全部父代，更换为子代
 			//m_veciPopulation.erase(m_veciPopulation.begin(), m_veciPopulation.begin()+m_nPopSize);
-			//this->_Sort();	// 为新一代排序
+			//this->Sort_();	// 为新一代排序
 
 			++m_nCurrGen;	// 更新当前代数
 		}

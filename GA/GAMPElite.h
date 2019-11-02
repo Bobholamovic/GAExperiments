@@ -5,17 +5,17 @@ namespace GA
 {
 	namespace GAMPElite
 	{
-		// 多父体杂交演化算法
+		// 精英多父体杂交演化算法
 		class CEvolutionMPE: public GAMP::CEvolutionMP
 		{
 		protected:
-			void _SelectParents(vector<CIndividual const*>&);
+			void SelectParents_(vector<CIndividual const*>&);
 		public:
 			int m_nCandidates = 2;	// 在子空间中选取的点数，>=2
 			int m_nElites = 2;	// 每次参与杂交的精英父本数
 		public:
 			CEvolutionMPE(
-				double(*objfunc)(CIndividual&), int n,
+				const OBJ_FUNC_TYPE& objfunc, int n,
 				int np, int nc,
 				vector<double>&& lb, vector<double>&& ub,
 				double pr, double pc
@@ -24,9 +24,9 @@ namespace GA
 			{}
 
 			CEvolutionMPE(
-				double(*objfunc)(CIndividual&), int n,
+				const OBJ_FUNC_TYPE& objfunc, int n,
 				int np, int nc,
-				vector<double>&& lb, vector<double>&& ub,
+				CHROM&& lb, CHROM&& ub,
 				double pr, double pc,
 				int m
 			) :
@@ -34,9 +34,9 @@ namespace GA
 			{}
 
 			CEvolutionMPE(
-				double(*objfunc)(CIndividual&), int n,
+				const OBJ_FUNC_TYPE& objfunc, int n,
 				int np, int nc,
-				vector<double>&& lb, vector<double>&& ub,
+				CHROM&& lb, CHROM&& ub,
 				double pr, double pc,
 				int m, int k, int l
 			) :

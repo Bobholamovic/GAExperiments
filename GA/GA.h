@@ -28,6 +28,8 @@ namespace GA
 		double m_dFitValue;
 	};
 
+	using OBJ_FUNC_TYPE=std::function<double(CIndividual&)>;
+
 	namespace NaiveGA
 	{
 		//进化处理类
@@ -36,35 +38,38 @@ namespace GA
 		protected:
 			double m_dSumF = 0.0;	// 当前代所有个体适应值之和，用于加速
 		protected:
-			static bool _Criterion(const CIndividual& ind1, const CIndividual& ind2)
+			static bool Criterion_(const CIndividual& ind1, const CIndividual& ind2)
 			{
 				return ind1.m_dFitValue > ind2.m_dFitValue;	// 降序排列
 			}
-			inline void _Sort()
+			inline void Sort_()
 			{
-				std::sort(m_veciPopulation.begin(), m_veciPopulation.end(), _Criterion);
+				std::sort(m_veciPopulation.begin(), m_veciPopulation.end(), Criterion_);
 			}
 
 		public:
 			vector <CIndividual> m_veciPopulation;	// 种群
 			int m_nCurrGen;	// 当前代数
 			int m_nGenerations;	// 总代数
-			double(*m_fcnObj)(CIndividual&);	// 目标函数
+			const OBJ_FUNC_TYPE m_fcnObj;	// 目标函数
 			int m_nPopSize;	// 种群大小
 			int m_nGenes;	// 每个染色体上基因数
 			double m_dPr;	// 繁殖概率
 			double m_dPc;	// 杂交概率
 			vector<double> m_vecdLB;	// 变元取值下界
 			vector<double> m_vecdUB;	// 变元取值上界
-			vector<std::function<double(CHROM&)>>  m_fcnConstraints;	// 约束函数
+			vector<std::function<double(CHROM&)>>  m_vecfcnConstraints;	// 约束函数
 
 		public:
 			//构造函数，调用初始化函数
-			CEvolution(double(*) (CIndividual&), int, int, int, vector<double>&&, vector<double>&&, double, double);
-			//生成下一代
-			void NextGeneration();
+			CEvolution(
+				const OBJ_FUNC_TYPE&, int, int, int, 
+				vector<double>&&, vector<double>&&, double, double
+			);
 			//初始化种群
 			void Init();
+			//生成下一代
+			void NextGeneration();
 			// 遗传操作
 			// 繁殖算子
 			virtual void Reproduce();
@@ -85,7 +90,7 @@ namespace GA
 						return MIN_VAL;
 				}
 
-				for (auto fun : this->m_fcnConstraints)
+				for (auto fun : this->m_vecfcnConstraints)
 				{
 					if (fun(ind.m_vecdChrom) < 0)
 						return MIN_VAL;
