@@ -6,7 +6,7 @@
 
 using std::endl;
 
-#define VERBOSE
+//#define VERBOSE
 #ifdef VERBOSE
 #define COUT std::cout
 #define SYSTEM(x) std::system(x)

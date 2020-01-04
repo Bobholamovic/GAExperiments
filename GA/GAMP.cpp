@@ -27,9 +27,9 @@ namespace GA
 			// 随机设置 alpha
 			for (auto i = 0; i < m_nParents-1; i++)
 			{
+				dLb = 2.5 - dSum - 1.5 * (m_nParents - i);
+				dUb = 0.5 - dSum + 0.5 * (m_nParents - i);
 				vecdAlpha[i] = RandRange((dLb < -0.5 ? -0.5 : dLb), (dUb > 1.5 ? 1.5 : dUb));
-				dLb = -vecdAlpha[i];
-				dUb -= vecdAlpha[i];
 				dSum += vecdAlpha[i];
 			}
 			vecdAlpha.back() = 1.0 - dSum;	// 确保alpha的和为1
